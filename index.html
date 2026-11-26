@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Car Export Desk · HS 870323 · Aarjav Jain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: three columns on desktop (step rail, working area, sticky deal sheet); rail and deal sheet collapse above and below on phones. Palette: cool paper, ink, indigo, amber. */
+:root{--bg:#F4F4F8;--panel:#FFFFFF;--ink:#16161D;--mute:#5F5F6E;--line:#E1E1EA;--accent:#4F46E5;--accent-soft:#E8E7FC;--accent-ink:#fff;--hi:#F59E0B;--hi-soft:#FDF0D4;--good:#0E8A4E;--good-soft:#D9F2E5;--bad:#C62828;--bad-soft:#FADCDC;--warn:#A86400;--warn-soft:#FDEBC8;--sheet:#16161D;--sheet-ink:#F4F4F8;--sheet-mute:#A5A5B8;
+--fh:'Bricolage Grotesque',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;--fm:'JetBrains Mono',ui-monospace,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0E13;--panel:#17171F;--ink:#EEEEF6;--mute:#9C9CB0;--line:#2A2A38;--accent:#8E88FF;--accent-soft:#25234B;--accent-ink:#10101A;--hi:#F6B23C;--hi-soft:#3A2D10;--good:#5ED392;--good-soft:#12342444;--bad:#FF8E8E;--bad-soft:#3E1B1B;--warn:#F2B04A;--warn-soft:#3A2B10;--sheet:#1F1F2B;--sheet-ink:#F1F1F8;--sheet-mute:#9C9CB0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E0E13;--panel:#17171F;--ink:#EEEEF6;--mute:#9C9CB0;--line:#2A2A38;--accent:#8E88FF;--accent-soft:#25234B;--accent-ink:#10101A;--hi:#F6B23C;--hi-soft:#3A2D10;--good:#5ED392;--good-soft:#12342444;--bad:#FF8E8E;--bad-soft:#3E1B1B;--warn:#F2B04A;--warn-soft:#3A2B10;--sheet:#1F1F2B;--sheet-ink:#F1F1F8;--sheet-mute:#9C9CB0;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--fb)}
+h1,h2,h3{font-family:var(--fh);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.app{max-width:1360px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr) 316px;gap:22px;padding:22px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px));align-items:start}
+.rail{position:sticky;top:22px}
+.logo{font:700 22px/1.1 var(--fh);margin-bottom:4px}.logo b{color:var(--accent)}
+.who{font-size:12.5px;color:var(--mute);margin-bottom:18px}
+.steps{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+.steps button{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;cursor:pointer;color:var(--mute);font-weight:500}
+.steps button i{font:600 12px var(--fm);width:24px;height:24px;border-radius:7px;background:var(--line);color:var(--ink);display:grid;place-items:center;font-style:normal}
+.steps button[aria-selected=true]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1.5px var(--accent)}
+.steps button[aria-selected=true] i{background:var(--accent);color:var(--accent-ink)}
+.steps button:focus-visible,input:focus-visible,select:focus-visible,.pre:focus-visible,.theme:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.theme{margin-top:18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 12px;font:500 12.5px var(--fb);cursor:pointer}
+.qrbox{margin-top:18px;font-size:12px;color:var(--mute)}.qrbox canvas,.qrbox img{display:block;margin-top:6px;border-radius:6px;background:#fff;padding:5px}
+main{min-width:0}
+section.step{display:none}section.step.on{display:block;animation:in .25s ease-out}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section.step.on{animation:none}html{scroll-behavior:auto}}
+.hero{padding:6px 2px 4px}.hero small{font:600 12px var(--fm);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.hero h2{font-size:34px;line-height:1.08;margin-top:6px}
+.lead{color:var(--mute);margin:8px 0 0;max-width:68ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;min-width:0}
+.card h3{font-size:17px;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media(max-width:700px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi small{color:var(--mute);font-size:11.5px;font-weight:500}
+.kpi b{display:block;font:700 24px/1.2 var(--fh)}
+.kpi i{font-style:normal;color:var(--mute);font-size:12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-size:11.5px;color:var(--mute);font-weight:600}
+tr.hl td{background:var(--accent-soft);font-weight:600}
+.l{text-align:left}
+.scroll{overflow-x:auto}
+.ctl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) 96px;gap:12px;align-items:center;padding:6px 0}
+.ctl label{font-size:13.5px;font-weight:500}.ctl label small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.ctl input[type=range]{width:100%;accent-color:var(--accent)}
+.ctl input[type=number],select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 9px;font:500 14px var(--fm)}
+select{font-family:var(--fb)}
+@media(max-width:520px){.ctl{grid-template-columns:minmax(0,1fr) 96px}.ctl input[type=range]{grid-column:1/-1;order:3}}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600}
+.pill.good{background:var(--good-soft);color:var(--good)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.note{font-size:12.5px;color:var(--mute);margin-top:8px}
+.src{font-size:12px;color:var(--mute);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 8px}
+.pre{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 11px;font:500 12.5px var(--fb);cursor:pointer}
+.pre[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.bar{height:9px;border-radius:5px;background:var(--accent);min-width:2px}
+.callout{border-radius:12px;padding:12px 16px;margin-top:14px;background:var(--accent-soft)}
+.callout.warn{background:var(--warn-soft)}.callout.bad{background:var(--bad-soft)}.callout.good{background:var(--good-soft)}
+svg text{fill:var(--mute);font:16px var(--fb)}svg .ln{stroke:var(--line)}svg .ink{fill:var(--ink)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+/* deal sheet */
+.sheet{position:sticky;top:22px;background:var(--sheet);color:var(--sheet-ink);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.sheet h3{font-size:13px;font-weight:600;color:var(--sheet-mute);letter-spacing:.06em;text-transform:uppercase}
+.sheet .mk{font:700 30px/1.05 var(--fh)}
+.sheet .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet .c small{display:block;font-size:11px;color:var(--sheet-mute)}
+.sheet .c b{font:600 17px var(--fm);white-space:nowrap}
+.sheet .neg{color:#FF9A9A}.sheet .pos{color:#7DE0A8}
+.verdict{border-radius:12px;padding:10px 12px;font-weight:600}
+.verdict small{display:block;font-weight:400;opacity:.85;font-size:12.5px;margin-top:2px}
+.verdict.go{background:#14532D;color:#D7F8E4}.verdict.caution{background:#6B4300;color:#FFE9BF}.verdict.stop{background:#6E1A1A;color:#FFD9D9}
+.sheet .mini{margin-top:2px}
+@media(max-width:1020px){
+ .app{grid-template-columns:minmax(0,1fr);gap:14px}
+ .rail{position:static}.steps{flex-direction:row;overflow-x:auto;padding-bottom:4px}.steps button{width:auto;white-space:nowrap;background:var(--panel);border:1px solid var(--line)}
+ .who,.qrbox{display:none}
+ .sheet{position:sticky;top:0;order:-1;z-index:5;padding:12px 14px;border-radius:0 0 14px 14px;margin:0 -16px}
+ .sheet .mk{font-size:22px}.sheet h3{display:none}.sheet .mini,.sheet .verdict small{display:none}
+ .sheet .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.sheet .c b{font-size:14px}
+ .rail{order:-0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+ <aside class="rail">
+  <div class="logo">Car Export <b>Desk</b></div>
+  <div class="who">HS 870323 · India<br>Aarjav Jain · DM273001</div>
+  <ol class="steps" id="tabs" role="tablist"></ol>
+  <button class="theme" id="themeBtn" type="button">Light / dark</button>
+  <div class="qrbox" id="qrbox"></div>
+ </aside>
+ <main>
+
+<section class="step" id="s-product"><div class="hero"><small>Step 1 · Product and code</small><h2>Petrol cars of 1,500–3,000 cc, HS 870323</h2><p class="lead">India’s exports of this code fell from $1.95bn in 2019 to $0.41bn in 2025. This plan rebuilds a niche in one market rather than scaling a strong position.</p></div>
+ <div class="card"><h3>What the code covers</h3><div class="scroll"><table>
+  <tr><td>HS 6-digit</td><td class="l">870323: passenger cars, spark-ignition piston engine, over 1,500 cc up to 3,000 cc</td></tr>
+  <tr><td>Australian line</td><td class="l">87032319, passenger motor vehicles, other (new cars). Line 87032311 is used cars and is not our product.</td></tr>
+  <tr><td>Mexican line</td><td class="l">87032301</td></tr>
+  <tr><td>Trade Map unit</td><td class="l">Cars for Australia, Mexico, USA and Canada; tonnes for the UK, Kuwait and Türkiye</td></tr></table></div>
+  <p class="note">Quantities come in two units, so each market’s unit value is compared with the world average on the same basis ($ per car or $ per tonne).</p></div>
+ <div class="card"><h3>Evidence behind every number in this tool</h3>
+  <ul style="margin:0;padding-left:18px"><li>Trade Map: world exporters and importers 2016–2025, values and quantities</li><li>Trade Map: India’s exports by destination and supplier lists for seven import markets</li><li>Trade Map: total exports of India and the world, used for RCA</li><li>ITC MacMap: tariffs, non-tariff measures and trade remedies on six routes</li></ul></div>
+</section>
+
+<section class="step" id="s-edge"><div class="hero"><small>Step 2 · India’s edge</small><h2>Small, low-priced, and no revealed advantage</h2><p class="lead">India’s share of world trade in this code is 0.185% and its RCA is 0.10. The edge has to come from price and from right-hand-drive markets where India already sells.</p></div>
+ <div class="kpis" id="edgeKpis"></div>
+ <div class="grid2"><div class="card"><h3>India’s exports, $ million</h3><div id="chIndia"></div></div>
+  <div class="card"><h3>RCA, worked out</h3><table id="rcaTbl"></table><p class="note">RCA = (India product exports ÷ India total exports) ÷ (world product exports ÷ world total exports). Below 1 means India is less specialised here than the world average.</p></div></div>
+ <div class="card"><h3>Top 3 rival exporters</h3><div class="scroll"><table id="rivals"></table></div>
+  <p class="note">Overlap is the share of India’s 2025 export value that meets this rival in Mexico and Australia (58% of India’s exports), weighted by the rival’s share of those markets’ imports. It stands in for the ITC export similarity index, which I could not download.</p></div>
+ <div class="src">Source: Trade Map, 2016–2025.</div>
+</section>
+
+<section class="step" id="s-market"><div class="hero"><small>Step 3 · Market choice</small><h2>Five markets shortlisted, one chosen</h2><p class="lead">Seven import markets were screened. The top five on balanced weights make the shortlist. Drag the weights and the ranking moves.</p></div>
+ <div class="card"><h3>Shortlist data, 2025</h3><div class="scroll"><table id="mkTbl"></table></div></div>
+ <div class="grid2"><div class="card"><h3>Scoring weights</h3><div class="presets" id="wPre"></div><div id="wCtl"></div><p class="note">Weights are normalised, so only proportions matter. Each criterion is scored 1–5.</p></div>
+  <div class="card"><h3>Weighted scorecard</h3><div class="scroll"><table id="score"></table></div></div></div>
+ <div class="card"><h3>Robustness check</h3><div class="scroll"><table id="robust"></table></div><div id="decide"></div></div>
+ <div class="grid2"><div class="card"><h3>What India actually sold, $ million</h3><div id="chTrend"></div><p class="note">Mexico was India’s largest buyer and has fallen 76% since 2017. Australia rose from zero to $64m. Trade Map, India-reported.</p></div>
+  <div class="card"><h3>Scoring bands</h3><p class="note" style="margin-top:0">Import value ≥$20bn=5, 10–20=4, 5–10=3, 2–5=2, below 2=1.<br>Growth 2020–25 CAGR ≥15%=5, 7–15=4, 3–7=3, 0–3=2, negative=1.<br>Unit value vs world ≥1.2=5, ≥1.05=4, ≥0.95=3, ≥0.8=2, else 1.<br>India’s share ≥5%=5, 2–5=4, 1–2=3, 0.1–1=2, below 0.1=1.<br>Screened out: Kuwait (2.45) and the UK (2.30) on balanced weights.</p></div></div>
+</section>
+
+<section class="step" id="s-volume"><div class="hero"><small>Step 4 · How much</small><h2>What the plant can ship against what the market can take</h2><p class="lead">Two independent estimates, one built from the plant and one from the market. If they disagree, one assumption is wrong.</p></div>
+ <div class="grid2"><div class="card"><h3>Bottom-up <span class="pill acc">assumption</span></h3><div id="volCtl"></div><p class="note">Australian new-car sales peak around March and the end of the financial year in June, so shipments should land before those dates.</p></div>
+  <div class="card"><h3>Top-down</h3><div id="tdCtl"></div><table id="tdTbl"></table></div></div>
+ <div id="volVerdict"></div>
+ <div class="card"><h3>Plan against the market</h3><div id="chVol"></div></div>
+ <div class="src">Market imports in cars: Trade Map quantities, 2025.</div>
+</section>
+
+<section class="step" id="s-money"><div class="hero"><small>Step 5 · Money and risk</small><h2>Profit, break-even and the odds of losing money</h2><p class="lead">Set price, cost and fixed costs. The tool then stress-tests them three ways: named scenarios, a one-at-a-time sensitivity and 4,000 random runs.</p></div>
+ <div class="grid2"><div class="card"><h3>Price and cost per car, USD <span class="pill acc">assumption</span></h3><div id="costCtl"></div>
+  <div class="presets" id="pricePre"></div></div>
+  <div class="card"><h3>Fixed costs per year, $ thousand <span class="pill acc">assumption</span></h3><div id="fixCtl"></div></div></div>
+ <div class="kpis" id="unitKpis"></div>
+ <div class="grid2"><div class="card"><h3>Where our price sits</h3><div id="chLadder"></div><p class="note" id="ladderNote"></p></div>
+  <div class="card"><h3>Break-even</h3><div id="chBE"></div></div></div>
+ <div class="grid2"><div class="card"><h3>Stress test: profit by scenario</h3><div id="chStress"></div></div>
+  <div class="card"><h3>Sensitivity: profit change for ±10% in each driver</h3><div id="chTor"></div></div></div>
+ <div class="card"><h3>Scenarios</h3><div class="scroll"><table id="stressTbl"></table></div>
+  <h3 style="margin-top:16px">Your own pessimistic case</h3><div id="stressCtl"></div></div>
+ <div class="card"><h3>4,000 random runs</h3><div id="mcCtl"></div><div id="chMC"></div><p class="note" id="mcNote"></p></div>
+ <div id="moneyVerdict"></div>
+</section>
+
+<section class="step" id="s-access"><div class="hero"><small>Step 6 · Access</small><h2>Tariffs, measures, route and plan B</h2><p class="lead">MacMap data for the two markets that matter. The tariff set here feeds the profit model.</p></div>
+ <div class="grid2"><div class="card"><h3>Tariff India pays <span class="pill acc">live input</span></h3><div id="accCtl"></div></div><div id="accNote"></div></div>
+ <div class="card"><h3>Tariffs on 870323: India against two rivals</h3><div class="scroll"><table id="tariffTbl"></table></div></div>
+ <div class="grid2"><div class="card"><h3>Non-tariff measures</h3><div id="ntm"></div></div><div class="card"><h3>Trade remedies and route</h3><div id="routeBox"></div></div></div>
+ <div class="card"><h3>Risks and alternative plan</h3><div class="scroll"><table id="riskTbl"></table></div></div>
+ <div class="src">Source: ITC Market Access Map (Mexico tariff year 2022, NTM year 2018; Australia as shown in MacMap); UNCTAD NTM classification. Route times are indicative and need a carrier quote.</div>
+</section>
+
+ </main>
+ <aside class="sheet" aria-live="polite">
+  <h3>Deal sheet</h3>
+  <div class="mk" id="shMk"></div>
+  <div class="grid" id="shGrid"></div>
+  <div class="verdict" id="shVerdict"></div>
+  <div class="mini" id="shMini"></div>
+ </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const MK={"Australia": {"imp25": 5331650.0, "imp20": 6129896.0, "unit": "Units", "uv": 19419, "iv": 80022.0, "iuv": 15144, "iu": 5284.0, "qty": 274561.0, "sh20": 0.0022957975143460835, "top": [["Japan", 41.2], ["Korea, Republic of", 17.5], ["Germany", 12.8], ["China", 6.6]]}, "Mexico": {"imp25": 4240165.0, "imp20": 3021345.0, "unit": "Units", "uv": 16645, "iv": 135883.0, "iuv": 13097, "iu": 10375.0, "qty": 254745.0, "sh20": 0.1754364364215275, "top": [["United States of America", 31.8], ["Japan", 21.5], ["China", 15.4], ["Germany", 9.4]]}, "Canada": {"imp25": 17441446.0, "imp20": 11246165.0, "unit": "Units", "uv": 23879, "iv": 8.0, "iuv": 2667, "iu": 3.0, "qty": 730411.0, "sh20": 0.004350638639927478, "top": [["United States of America", 30.7], ["Mexico", 22.8], ["Japan", 19.3], ["Korea, Republic of", 11.9]]}, "United States of America": {"imp25": 76395797.0, "imp20": 81634751.0, "unit": "Units", "uv": 24024, "iv": 316.0, "iuv": 7349, "iu": 43.0, "qty": 3180036.0, "sh20": 0.005802124636847364, "top": [["Mexico", 26.9], ["Japan", 18.8], ["Canada", 14.8], ["Germany", 14.6]]}, "Türkiye": {"imp25": 2240273.0, "imp20": 771365.0, "unit": "Tons", "uv": 15148, "iv": 0.0, "iuv": null, "iu": 0.0, "qty": 147890.0, "sh20": 0.0, "top": [["Germany", 33.5], ["China", 19.3], ["Slovakia", 18.3], ["Czech Republic", 10.4]]}, "Kuwait": {"imp25": 1839649.0, "imp20": 621811.0, "unit": "Tons", "uv": 14443, "iv": 2475.0, "iuv": 10808, "iu": 229.0, "qty": 127369.201, "sh20": 0.015096226988586564, "top": [["China", 36.0], ["Slovakia", 10.4], ["Japan", 10.2], ["Germany", 10.0]]}, "United Kingdom": {"imp25": 6610466.0, "imp20": 6057645.0, "unit": "Tons", "uv": 17407, "iv": 283.0, "iuv": 15722, "iu": 18.0, "qty": 379754.0, "sh20": 5.7778228998232814e-06, "top": [["Germany", 36.5], ["Belgium", 11.9], ["Japan", 9.5], ["Slovakia", 8.8]]}};
+const TREND={yrs:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],aus:[0,11801,22121,0,24001,34080,52901,86293,43322,64386],mex:[727708,841250,603441,680041,524946,409851,433920,299816,282795,174638]};
+const LADDER=[['Germany',29372],['Mexico',21231],['Market average',19419],['Japan',18055],['Korea',17560],['China',16127],['India (2025)',15144],['Thailand',14456]];
+const WORLD_UV={Units:17587,Tons:15463};
+const IND={yrs:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],val:[1212961,1449285,1939053,1949811,1413898,961457,1379800,860932,476626,411806],worldVal:[277685355,279805470,288237402,278539163,213234349,214818695,218770951,256347299,254150926,222729989],indTot:446551641,worldTot:24166440024};
+const RIV=[{n:'Japan',v:35145982,uv:18520,b:'car',ov:15.5,sh:'41% of Australia, 21% of Mexico'},{n:'United States',v:22362517,uv:15052,b:'car',ov:14.0,sh:'32% of Mexico, 3% of Australia'},{n:'China',v:17759638,uv:10269,b:'tonne',ov:7.6,sh:'15% of Mexico, 7% of Australia'}];
+const SHORT=['Canada','Mexico','United States of America','Australia','Türkiye'];
+const LABEL={'United States of America':'USA'};const lab=n=>LABEL[n]||n;
+const ACCESS={Australia:{tariff:0,preset:{price:15100,freight:750,share:.5},mfn:5},Mexico:{tariff:20,preset:{price:13100,freight:850,share:.5},mfn:20}};
+const S={market:'Australia',w:[30,25,15,30],upw:30,weeks:40,price:15100,mfg:11200,freight:750,port:350,warr:200,fix:{compliance:300,marketing:400,tooling:500,yard:150,admin:250},tariff:0,absorb:50,share:.5,unc:1,cust:{dp:-5,dc:5,dv:-15,df:0}};
+const WSETS={Balanced:[30,25,15,30],'Growth-hunter':[15,45,15,25],Foothold:[15,10,15,60]};
+const SC=[{c:[20,10,5,2]},{c:[15,7,3,0]},{c:[1.2,1.05,.95,.8]},{c:[5,2,1,.1]}];
+const band=(x,c)=>{for(let i=0;i<c.length;i++)if(x>=c[i])return 5-i;return 1};
+const $=id=>document.getElementById(id);
+const fmtM=x=>(x<0?'−':'')+'$'+(Math.abs(x)/1e6).toFixed(2)+'m';
+const fmtN=x=>Math.round(x).toLocaleString('en-US');
+const fmtD=x=>(x<0?'−$':'$')+fmtN(Math.abs(x));
+
+function metrics(n){const m=MK[n];const cagr=Math.pow(m.imp25/m.imp20,.2)-1;const sh=m.iv/m.imp25;const ratio=m.uv/WORLD_UV[m.unit];
+ return{n,imp:m.imp25/1e6,cagr:cagr*100,ratio,share:sh*100,sc:[band(m.imp25/1e6,SC[0].c),band(cagr*100,SC[1].c),band(ratio,SC[2].c),band(sh*100,SC[3].c)],m}}
+const MET=SHORT.map(metrics);
+const score=(r,w)=>{const t=w.reduce((a,b)=>a+b,0)||1;return r.sc.reduce((a,s,i)=>a+s*w[i],0)/t};
+const ranked=w=>MET.map(r=>({r,s:score(r,w)})).sort((a,b)=>b.s-a.s);
+
+function model(o={}){const dp=o.dp||0,dc=o.dc||0,dv=o.dv||0,df=o.df||0,dt=o.dt||0;
+ const vol=S.upw*S.weeks*(1+dv);
+ const tar=Math.max(0,S.tariff+dt);
+ const net=S.price*(1-tar/100*S.absorb/100)*(1+dp);
+ const cost=(S.mfg+S.freight+S.port+S.warr)*(1+dc);
+ const fixed=Object.values(S.fix).reduce((a,b)=>a+b,0)*1000*(1+df);
+ const cm=net-cost,rev=vol*net,profit=cm*vol-fixed,be=cm>0?fixed/cm:Infinity;
+ return{vol,net,cost,fixed,cm,rev,profit,be,ms:cm>0&&vol>0?1-be/vol:-Infinity}}
+const SCEN=[{n:'Price war',d:'Rivals discount 8%; we sell 20% fewer cars',dp:-.08,dv:-.2,dc:0,df:0,fix:'Pre-sell to dealers before shipping; hold 2-year price lists'},
+ {n:'Cost shock',d:'Freight, steel and rupee lift cost per car 10%',dp:0,dv:0,dc:.1,df:0,fix:'Annual freight contract; rupee hedge; share the rise with the dealer'},
+ {n:'Perfect storm',d:'Price −8%, cost +8%, cars −30%, fixed costs +10%',dp:-.08,dv:-.3,dc:.08,df:.1,fix:'Ship firm orders only; delay marketing spend; move to Plan B'}];
+const allScen=()=>[...SCEN,{n:'Your case',d:`Price ${S.cust.dp}%, cost ${S.cust.dc>0?'+':''}${S.cust.dc}%, cars ${S.cust.dv}%, fixed ${S.cust.df>0?'+':''}${S.cust.df}%`,dp:S.cust.dp/100,dc:S.cust.dc/100,dv:S.cust.dv/100,df:S.cust.df/100,fix:'Your own test'}];
+
+/* random runs: seeded so the picture is stable until an input changes */
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function tri(r,lo,mo,hi){const u=r(),c=(mo-lo)/(hi-lo);return u<c?lo+Math.sqrt(u*(hi-lo)*(mo-lo)):hi-Math.sqrt((1-u)*(hi-lo)*(hi-mo))}
+function monte(N=4000){const r=rng(870323),k=S.unc,out=[];
+ for(let i=0;i<N;i++){out.push(model({dp:tri(r,-.08*k,0,.05*k),dc:tri(r,-.05*k,0,.08*k),dv:tri(r,-.25*k,0,.15*k),df:tri(r,-.05*k,0,.10*k)}).profit)}
+ out.sort((a,b)=>a-b);const q=p=>out[Math.min(N-1,Math.floor(p*N))];
+ return{out,p5:q(.05),p50:q(.5),p95:q(.95),pLoss:out.filter(x=>x<0).length/N,mean:out.reduce((a,b)=>a+b,0)/N}}
+
+/* inputs */
+const CTLS=[];
+function ctl(host,spec){const row=document.createElement('div');row.className='ctl';
+ row.innerHTML=`<label for="${host.id}-${spec.id}-n">${spec.label}${spec.sub?`<small>${spec.sub}</small>`:''}</label><input type="range" id="${host.id}-${spec.id}-r" min="${spec.min}" max="${spec.max}" step="${spec.step}" aria-label="${spec.label}"><input type="number" id="${host.id}-${spec.id}-n" min="${spec.min}" max="${spec.max}" step="${spec.step}">`;
+ host.appendChild(row);const r=row.querySelector('[type=range]'),n=row.querySelector('[type=number]');
+ spec.sync=()=>{const v=spec.get();r.value=v;n.value=v};
+ const upd=e=>{const v=parseFloat(e.target.value);if(isNaN(v))return;spec.set(v);if(e.target===r)n.value=v;else r.value=v;render()};
+ r.addEventListener('input',upd);n.addEventListener('input',upd);spec.sync();CTLS.push(spec)}
+
+/* charts */
+function bars(vals,labels,o={}){const W=520,H=210,pl=46,pb=26,pt=14,pr=8;const mx=Math.max(...vals,1)*1.12;const bw=(W-pl-pr)/vals.length;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${o.aria||'chart'}">`;
+ for(let i=0;i<=4;i++){const y=pt+(H-pt-pb)*(1-i/4);s+=`<line class="ln" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${o.fy?o.fy(mx*i/4):Math.round(mx*i/4)}</text>`}
+ vals.forEach((v,i)=>{const h=(H-pt-pb)*v/mx,x=pl+i*bw+bw*.16,y=H-pb-h;const c=o.hl&&o.hl(i)?'var(--hi)':'var(--accent)';s+=`<rect x="${x}" y="${y}" width="${bw*.68}" height="${h}" fill="${c}" rx="3"/><text x="${x+bw*.34}" y="${H-8}" text-anchor="middle">${labels[i]}</text>`;if(o.vl)s+=`<text x="${x+bw*.34}" y="${y-4}" text-anchor="middle">${o.vl(v)}</text>`});
+ return s+'</svg>'}
+function lines(series,labels,o={}){const W=520,H=220,pl=46,pb=26,pt=14,pr=10;const mx=Math.max(...series.flatMap(s=>s.v),1)*1.1;const X=i=>pl+(W-pl-pr)*i/(labels.length-1),Y=v=>H-pb-(H-pt-pb)*v/mx;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${o.aria}">`;
+ for(let i=0;i<=4;i++){const y=Y(mx*i/4);s+=`<line class="ln" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${Math.round(mx*i/4)}</text>`}
+ labels.forEach((l,i)=>{s+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle">${l}</text>`});
+ series.forEach(se=>{s+=`<polyline fill="none" stroke="${se.c}" stroke-width="2.6" stroke-linejoin="round" points="${se.v.map((v,i)=>X(i)+','+Y(v)).join(' ')}"/>`+se.v.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="3" fill="${se.c}"/>`).join('')+`<text x="${X(se.v.length-1)-4}" y="${Y(se.v[se.v.length-1])-8}" text-anchor="end" style="fill:${se.c};font-weight:600">${se.n}</text>`});
+ return s+'</svg>'}
+function diverge(vals,labels,fy){const W=520,H=230,pl=58,pr=8,pt=16,pb=34;const mx=Math.max(...vals.map(Math.abs),1)*1.2;const z=pt+(H-pt-pb)/2,bw=(W-pl-pr)/vals.length;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Profit by scenario">`;
+ [-1,-.5,0,.5,1].forEach(k=>{const y=z-k*(H-pt-pb)/2;s+=`<line class="ln" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">${fy(mx*k)}</text>`});
+ vals.forEach((v,i)=>{const h=Math.abs(v)/mx*(H-pt-pb)/2,x=pl+i*bw+bw*.18,y=v>=0?z-h:z;s+=`<rect x="${x}" y="${y}" width="${bw*.64}" height="${Math.max(h,1.5)}" fill="${v>=0?'var(--good)':'var(--bad)'}" rx="3"/><text x="${x+bw*.32}" y="${v>=0?y-4:y+h+13}" text-anchor="middle">${fy(v)}</text><text x="${x+bw*.32}" y="${H-12}" text-anchor="middle">${labels[i]}</text>`});
+ return s+'</svg>'}
+function beChart(m){const W=520,H=230,pl=52,pr=10,pt=14,pb=28;const xmax=Math.max(m.vol,isFinite(m.be)?m.be:0,1)*1.25;const ymax=Math.max(m.rev,m.fixed+m.cost*xmax,1)*1.05;
+ const X=x=>pl+(W-pl-pr)*x/xmax,Y=y=>H-pb-(H-pt-pb)*y/ymax;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Break-even chart">`;
+ for(let i=0;i<=4;i++){const y=Y(ymax*i/4);s+=`<line class="ln" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-6}" y="${y+4}" text-anchor="end">$${(ymax*i/4/1e6).toFixed(0)}m</text><text x="${X(xmax*i/4)}" y="${H-8}" text-anchor="middle">${fmtN(xmax*i/4)}</text>`}
+ s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(m.net*xmax)}" stroke="var(--accent)" stroke-width="2.6"/><line x1="${X(0)}" y1="${Y(m.fixed)}" x2="${X(xmax)}" y2="${Y(m.fixed+m.cost*xmax)}" stroke="var(--hi)" stroke-width="2.6"/>`;
+ if(isFinite(m.be)&&m.be<xmax)s+=`<circle cx="${X(m.be)}" cy="${Y(m.be*m.net)}" r="5.5" class="ink"/><text x="${X(m.be)+9}" y="${Y(m.be*m.net)+15}" class="ink">break-even ${fmtN(m.be)}</text>`;
+ s+=`<line x1="${X(m.vol)}" x2="${X(m.vol)}" y1="${pt}" y2="${H-pb}" stroke="var(--mute)" stroke-dasharray="4 3"/><text x="${X(m.vol)-5}" y="${pt+10}" text-anchor="end">plan ${fmtN(m.vol)}</text><text x="${pl+6}" y="${pt+12}" style="fill:var(--accent);font-weight:600">revenue</text><text x="${pl+6}" y="${pt+26}" style="fill:var(--hi);font-weight:600">total cost</text>`;
+ return s+'</svg>'}
+function ladder(){const items=S.market==='Australia'?LADDER.slice():[['Market average',MK.Mexico.uv],['India (2025)',MK.Mexico.iuv]];
+ items.sort((a,b)=>b[1]-a[1]);const W=520,rh=28,H=items.length*rh+34,pl=130,pr=64;const mx=Math.max(...items.map(i=>i[1]),S.price)*1.05;const X=v=>pl+(W-pl-pr)*v/mx;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Unit values in ${S.market}">`;
+ items.forEach((it,i)=>{const y=6+i*rh,me=it[0].startsWith('India');s+=`<text x="${pl-8}" y="${y+14}" text-anchor="end" ${me?'style="fill:var(--ink);font-weight:600"':''}>${it[0]}</text><rect x="${pl}" y="${y+3}" width="${X(it[1])-pl}" height="16" rx="3" fill="${me?'var(--hi)':it[0]==='Market average'?'var(--mute)':'var(--accent)'}"/><text x="${X(it[1])+5}" y="${y+15}">$${(it[1]/1000).toFixed(1)}k</text>`});
+ s+=`<line x1="${X(S.price)}" x2="${X(S.price)}" y1="0" y2="${H-22}" stroke="var(--bad)" stroke-width="2" stroke-dasharray="5 3"/><text x="${X(S.price)}" y="${H-8}" text-anchor="middle" style="fill:var(--bad);font-weight:600">your price $${(S.price/1000).toFixed(1)}k</text>`;
+ return s+'</svg>'}
+function tornado(){const base=model().profit;const d=[['Price per car',{dp:.1},{dp:-.1}],['Cost per car',{dc:-.1},{dc:.1}],['Cars sold',{dv:.1},{dv:-.1}],['Fixed costs',{df:-.1},{df:.1}],['Tariff (±5 pts)',{dt:-5},{dt:5}]]
+ .map(([n,a,b])=>({n,hi:model(a).profit-base,lo:model(b).profit-base})).sort((x,y)=>(y.hi-y.lo)-(x.hi-x.lo));
+ const W=520,rh=36,H=d.length*rh+30,pl=132,pr=14;const mx=Math.max(...d.flatMap(x=>[Math.abs(x.hi),Math.abs(x.lo)]),1)*1.25;const z=pl+(W-pl-pr)/2;const k=(W-pl-pr)/2/mx;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Sensitivity of profit">`;
+ d.forEach((x,i)=>{const y=8+i*rh;s+=`<text x="${pl-8}" y="${y+16}" text-anchor="end">${x.n}</text>`;
+  [[x.hi,'var(--good)'],[x.lo,'var(--bad)']].forEach(([v,c])=>{const w=Math.abs(v)*k;s+=`<rect x="${v>=0?z:z-w}" y="${y+4}" width="${Math.max(w,1)}" height="18" fill="${c}" rx="2"/><text x="${v>=0?z+w+4:z-w-4}" y="${y+17}" text-anchor="${v>=0?'start':'end'}">${(v<0?'−':'+')+'$'+(Math.abs(v)/1e3).toFixed(0)+'k'}</text>`})});
+ s+=`<line x1="${z}" x2="${z}" y1="2" y2="${H-20}" stroke="var(--ink)"/><text x="${z}" y="${H-6}" text-anchor="middle">base profit ${fmtM(base)}</text></svg>`;return s}
+function hist(mc){const W=520,H=210,pl=14,pr=14,pt=14,pb=34,B=28;const lo=mc.out[0],hi=mc.out[mc.out.length-1];const bw=(hi-lo)/B||1;const c=Array(B).fill(0);mc.out.forEach(v=>c[Math.min(B-1,Math.floor((v-lo)/bw))]++);const mx=Math.max(...c);const X=v=>pl+(W-pl-pr)*(v-lo)/(hi-lo||1);
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Distribution of profit over 4,000 runs">`;
+ c.forEach((n,i)=>{const x0=lo+i*bw,h=(H-pt-pb)*n/mx;s+=`<rect x="${X(x0)+.5}" y="${H-pb-h}" width="${(W-pl-pr)/B-1}" height="${h}" fill="${x0+bw<=0?'var(--bad)':x0>=0?'var(--good)':'var(--mute)'}" rx="1.5"/>`});
+ if(lo<0&&hi>0)s+=`<line x1="${X(0)}" x2="${X(0)}" y1="${pt}" y2="${H-pb+4}" stroke="var(--ink)" stroke-width="1.5"/><text x="${X(0)}" y="${pt-3}" text-anchor="middle" class="ink">$0</text>`;
+ [[mc.p5,'5th pct'],[mc.p50,'median'],[mc.p95,'95th pct']].forEach(([v,l],i)=>{s+=`<text x="${Math.min(W-30,Math.max(30,X(v)))}" y="${H-8}" text-anchor="middle">${l} ${fmtM(v)}</text>`});
+ return s+'</svg>'}
+
+/* render */
+function tabsInit(){const steps=[['product','Product and code'],['edge','India’s edge'],['market','Market choice'],['volume','How much'],['money','Money and risk'],['access','Access']];
+ const t=$('tabs');steps.forEach(([id,l],i)=>{const li=document.createElement('li');const b=document.createElement('button');b.type='button';b.dataset.id=id;b.setAttribute('role','tab');b.innerHTML=`<i>${i+1}</i>${l}`;b.onclick=()=>{location.hash=id};li.appendChild(b);t.appendChild(li)});
+ const show=()=>{const id=(location.hash||'#product').slice(1);const ok=steps.some(s=>s[0]===id)?id:'product';document.querySelectorAll('section.step').forEach(s=>s.classList.toggle('on',s.id==='s-'+ok));t.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));window.scrollTo(0,0)};
+ addEventListener('hashchange',show);show()}
+
+function renderStatic(){
+ const last=IND.val[9],rca=(last/IND.indTot)/(IND.worldVal[9]/IND.worldTot);
+ $('edgeKpis').innerHTML=`<div class="kpi"><small>India exports 2025</small><b>$${(last/1e3).toFixed(1)}m</b><i>down 79% from 2019</i></div><div class="kpi"><small>World exports 2025</small><b>$${(IND.worldVal[9]/1e6).toFixed(1)}bn</b><i>India share ${(last/IND.worldVal[9]*100).toFixed(3)}%</i></div><div class="kpi"><small>India’s rank</small><b>#26</b><i>among exporters</i></div><div class="kpi"><small>RCA</small><b>${rca.toFixed(2)}</b><i>below 1: no advantage</i></div><div class="kpi"><small>Price per car</small><b>$12.1k</b><i>world $17.6k, 0.69×</i></div>`;
+ $('chIndia').innerHTML=bars(IND.val.map(v=>v/1e3),IND.yrs.map(y=>String(y).slice(2)),{vl:v=>Math.round(v),hl:i=>i===3,aria:'India exports 2016 to 2025'});
+ $('rcaTbl').innerHTML=`<tr><td>India 870323 exports</td><td>$411.8m</td></tr><tr><td>India total exports</td><td>$446.6bn</td></tr><tr><td>Share of India’s exports</td><td>${(last/IND.indTot*100).toFixed(4)}%</td></tr><tr><td>World 870323 exports</td><td>$222.7bn</td></tr><tr><td>World total exports</td><td>$24,166bn</td></tr><tr><td>Share of world exports</td><td>${(IND.worldVal[9]/IND.worldTot*100).toFixed(4)}%</td></tr><tr class="hl"><td>RCA</td><td>${rca.toFixed(2)}</td></tr>`;
+ $('rivals').innerHTML=`<tr><th>Exporter</th><th>Exports 2025</th><th>Price</th><th>vs India</th><th>Overlap</th><th class="l">Where we meet</th></tr><tr><td>India</td><td>$0.41bn</td><td>$12,143/car</td><td>—</td><td>—</td><td class="l">—</td></tr>`+RIV.map(r=>`<tr><td>${r.n}</td><td>$${(r.v/1e6).toFixed(1)}bn</td><td>$${fmtN(r.uv)}/${r.b}</td><td>${r.b==='car'?(r.uv/12143).toFixed(2)+'× India':'per tonne'}</td><td>${r.ov}%</td><td class="l">${r.sh}</td></tr>`).join('');
+ $('chTrend').innerHTML=lines([{n:'Mexico',c:'var(--hi)',v:TREND.mex.map(v=>v/1e3)},{n:'Australia',c:'var(--accent)',v:TREND.aus.map(v=>v/1e3)}],TREND.yrs.map(y=>String(y).slice(2)),{aria:'India exports to Mexico and Australia'});
+ $('tariffTbl').innerHTML=`<tr><th>Importer</th><th>Exporter</th><th>MFN</th><th>Preferential</th><th>NTMs</th><th>Remedies</th><th class="l">Gap against India</th></tr>
+ <tr class="hl"><td>Australia (87032319)</td><td>India</td><td>5%</td><td>0%</td><td>0</td><td>None</td><td class="l">—</td></tr><tr><td>Australia</td><td>Japan</td><td>5%</td><td>0%</td><td>0</td><td>None</td><td class="l">none</td></tr><tr><td>Australia</td><td>Korea</td><td>5%</td><td>0%</td><td>0</td><td>None</td><td class="l">none</td></tr>
+ <tr class="hl"><td>Mexico (87032301)</td><td>India</td><td>20%</td><td>none</td><td>32</td><td>None</td><td class="l">—</td></tr><tr><td>Mexico</td><td>USA</td><td>20%</td><td>0%</td><td>32</td><td>None</td><td class="l">India pays 20 points more</td></tr><tr><td>Mexico</td><td>Japan</td><td>20%</td><td>0%</td><td>32</td><td>None</td><td class="l">India pays 20 points more</td></tr>
+ <tr class="hl"><td>Canada (87032300)</td><td>India</td><td>6.1%</td><td>none</td><td>24</td><td>None</td><td class="l">Rivals not run in MacMap</td></tr>`;
+ $('ntm').innerHTML=`<table><tr><th>Mexico, India route</th><th>Count</th><th></th></tr>`+[['Licensing and quantity control (E)',21,'Non-automatic licensing 16, no-criteria licensing 3, permanent 1, tariff-rate quota 1'],['Technical regulations (TBT, B)',11,'Quality and safety 4, testing 3, labelling 1, residues 1, conformity 1, certification 1'],['SPS (A)',0,'None recorded']].map(r=>`<tr><td class="l">${r[0]}<div class="note" style="margin:2px 0 0">${r[2]}</div></td><td>${r[1]}</td><td style="width:30%"><div class="bar" style="width:${r[1]/21*100}%"></div></td></tr>`).join('')+`<tr class="hl"><td>Total</td><td>32</td><td></td></tr></table><div class="callout warn"><b>Australia: MacMap shows 0.</b> Cars still need Australian Design Rules approval under the Road Vehicle Standards Act. That is a TBT-type requirement outside MacMap, so it is costed in the fixed costs ($300k).</div>`;
+ $('routeBox').innerHTML=`<table><tr><td class="l">Trade remedies</td><td class="l">None in Australia or Mexico</td></tr><tr><td class="l"><b>Australia route</b></td><td class="l">Chennai (Kamarajar) by roll-on/roll-off ship to Melbourne or Brisbane, about 3–4 weeks at sea</td></tr><tr><td class="l"><b>Plan B route</b></td><td class="l">Chennai to Durban, about 2–3 weeks at sea</td></tr><tr><td class="l">Documents</td><td class="l">Invoice, ECTA certificate of origin, design approval, biosecurity clean-down</td></tr></table><p class="note">Sailing times are indicative; confirm with a carrier before quoting dealers.</p>`;
+ $('riskTbl').innerHTML=`<tr><th class="l">Risk</th><th class="l">Trigger</th><th class="l">Response</th></tr><tr><td class="l">Market keeps shrinking</td><td class="l">Imports fell 2.8% a year, 2020–25</td><td class="l">Ship against firm dealer orders; cap weekly output</td></tr><tr><td class="l">Japan and Korea discount</td><td class="l">Together 59% of imports at 0% duty</td><td class="l">Stay in the budget SUV and sedan band</td></tr><tr><td class="l">Approval delayed</td><td class="l">Design approval slips past plan</td><td class="l">Start approval before production; hold back a quarter of fixed spend</td></tr><tr><td class="l">Freight or rupee shock</td><td class="l">Cost per car up 10%</td><td class="l">Annual freight contract; part hedge</td></tr><tr class="hl"><td class="l">Alternative plan</td><td class="l">Worst case below zero for two quarters</td><td class="l">Redirect volume to South Africa, India’s third-largest 2025 buyer (4,373 cars), another right-hand-drive market. Mexico only if the tariff gap closes.</td></tr>`;
+}
+
+function renderMarket(){
+ $('mkTbl').innerHTML=`<tr><th>Market</th><th>Imports 2025</th><th>CAGR 20–25</th><th>Unit value</th><th>vs world</th><th>India share</th><th class="l">Top suppliers</th></tr>`+MET.map(r=>{const m=r.m;return`<tr><td>${lab(r.n)}</td><td>$${(r.imp/1e3).toFixed(2)}bn</td><td>${r.cagr>0?'+':''}${r.cagr.toFixed(1)}%</td><td>$${fmtN(m.uv)}/${m.unit==='Units'?'car':'tonne'}</td><td>${r.ratio.toFixed(2)}×</td><td>${r.share<.01?'≈0':r.share.toFixed(2)+'%'}</td><td class="l">${m.top.slice(0,3).map(t=>lab(t[0])+' '+t[1]+'%').join(', ')}</td></tr>`}).join('');
+ const rk=ranked(S.w);
+ $('score').innerHTML=`<tr><th>Market</th><th style="width:36%"></th><th>Score</th></tr>`+rk.map((x,i)=>`<tr class="${i===0?'hl':''}"><td>${lab(x.r.n)}</td><td><div class="bar" style="width:${x.s/5*100}%"></div></td><td>${x.s.toFixed(2)}<div class="note" style="margin:0">${x.r.sc.join(' · ')}</div></td></tr>`).join('')+`<tr><td colspan="3" class="l note">Scores shown as size · growth · price · India’s share</td></tr>`;
+ const sets=[...Object.entries(WSETS),['Your weights',S.w]];
+ $('robust').innerHTML=`<tr><th>Weight set (size/growth/price/share)</th>${MET.map(r=>`<th>${lab(r.n)}</th>`).join('')}<th>Leader</th></tr>`+sets.map(([k,w])=>{const rr=ranked(w);const t=w.reduce((a,b)=>a+b,0)||1;const tie=rr[1]&&Math.abs(rr[0].s-rr[1].s)<1e-9;return`<tr><td>${k} (${w.map(x=>Math.round(x/t*100)).join('/')})</td>${MET.map(r=>`<td>${score(r,w).toFixed(2)}</td>`).join('')}<td><b>${lab(rr[0].r.n)}${tie?' (tie)':''}</b></td></tr>`}).join('');
+ const lead=rk[0].r.n,ausR=rk.findIndex(x=>x.r.n==='Australia')+1;
+ $('decide').innerHTML=`<div class="callout ${S.market===lead?'good':'warn'}"><b>Scorecard leader: ${lab(lead)} (${rk[0].s.toFixed(2)}).</b> Australia ranks #${ausR} on these weights. The scorecard measures demand and fit, not access. I choose <b>${S.market}</b> because India already sells there (${fmtN(MK[S.market].iu)} cars in 2025, ${(MK[S.market].iv/MK[S.market].imp25*100).toFixed(1)}% share) and MacMap confirms ${S.market==='Australia'?'0% duty, level with Japan and Korea':'a 20-point tariff gap against the USA and Japan'}. ${lead==='Canada'?'Canada fails the access test: MacMap shows India pays 6.1% with no preference and faces 24 non-tariff measures, and India sold it only $8,000 of cars in 2025.':lead in ACCESS?'':`Access for ${lab(lead)} is not checked in MacMap, so it cannot be chosen yet.`}</div>
+ <div class="row" style="margin-top:12px"><label for="mktSel"><b>Chosen market</b></label><select id="mktSel" style="width:auto"><option ${S.market==='Australia'?'selected':''}>Australia</option><option ${S.market==='Mexico'?'selected':''}>Mexico</option></select><span class="note" style="margin:0">Only markets with MacMap data can be chosen. Switching resets price, freight, tariff and market size.</span></div>`;
+ $('mktSel').onchange=e=>setMarket(e.target.value)}
+function setMarket(n){const a=ACCESS[n];S.market=n;S.price=a.preset.price;S.freight=a.preset.freight;S.tariff=a.tariff;S.share=a.preset.share;CTLS.forEach(c=>c.sync());render()}
+
+function renderVolume(){const m=model(),mk=MK[S.market],units=mk.qty,td=units*S.share/100,gap=(m.vol-td)/td;
+ $('tdTbl').innerHTML=`<tr><td>${S.market} imports 2025</td><td>${fmtN(units)} cars</td></tr><tr><td>Realistic share</td><td>${S.share.toFixed(2)}%</td></tr><tr class="hl"><td>Top-down volume</td><td>${fmtN(td)} cars</td></tr><tr><td>India sold there in 2025</td><td>${fmtN(mk.iu)} cars</td></tr><tr><td>Plan as share of market</td><td>${(m.vol/units*100).toFixed(2)}%</td></tr>`;
+ const ok=Math.abs(gap)<=.2;
+ $('volVerdict').innerHTML=`<div class="callout ${ok?'good':'warn'}"><b>Bottom-up ${fmtN(m.vol)} cars against top-down ${fmtN(td)} cars: gap ${gap>0?'+':''}${(gap*100).toFixed(0)}%.</b> ${ok?'The estimates agree within 20%, so the volume is credible.':gap>0?'The plant plans more than the market share supports. Cut weeks or cars per week, or justify a higher share.':'The market could take more than the plant plans to ship. There is room to add capacity.'} The plan equals ${(m.vol/mk.iu*100).toFixed(0)}% of what India sold into ${S.market} in 2025.</div>`;
+ $('chVol').innerHTML=bars([m.vol,td,mk.iu],['Bottom-up plan','Top-down share','India sold 2025'],{vl:v=>fmtN(v),fy:v=>fmtN(v),aria:'Volume comparison',hl:i=>i===0})}
+
+let MC=null;
+function renderMoney(){const m=model(),sc=allScen().map(s=>({s,m:model(s)}));MC=monte();
+ $('unitKpis').innerHTML=`<div class="kpi"><small>Net price per car</small><b>${fmtD(m.net)}</b><i>after duty absorbed</i></div><div class="kpi"><small>Cost per car</small><b>${fmtD(m.cost)}</b><i>variable</i></div><div class="kpi"><small>Margin per car</small><b>${fmtD(m.cm)}</b><i>${m.net?(m.cm/m.net*100).toFixed(1):0}% of price</i></div><div class="kpi"><small>Break-even</small><b>${isFinite(m.be)?fmtN(m.be):'never'}</b><i>${isFinite(m.be)&&m.vol?(m.be/m.vol*100).toFixed(0)+'% of plan':'margin negative'}</i></div><div class="kpi"><small>Base profit</small><b>${fmtM(m.profit)}</b><i>fixed ${fmtM(m.fixed)}</i></div>`;
+ $('chLadder').innerHTML=ladder();
+ $('ladderNote').textContent=S.market==='Australia'?`India’s 2025 price into Australia was $15,144, 16% below Japan ($18,055) and 6% below China ($16,127). Price is the lever with most room.`:`India’s 2025 price into Mexico was $13,097 against a market average of $16,645. A 20% duty on top makes that gap hard to hold.`;
+ $('chBE').innerHTML=beChart(m);
+ $('chStress').innerHTML=diverge([m.profit,...sc.map(x=>x.m.profit)],['Base','Price war','Cost shock','Storm','Yours'],v=>(v<0?'−':'')+'$'+(Math.abs(v)/1e6).toFixed(1)+'m');
+ $('chTor').innerHTML=tornado();
+ $('stressTbl').innerHTML=`<tr><th>Scenario</th><th>Net price</th><th>Cost</th><th>Cars</th><th>Fixed</th><th>Profit</th><th>Break-even</th><th class="l">Response</th></tr><tr class="hl"><td>Base</td><td>${fmtD(m.net)}</td><td>${fmtD(m.cost)}</td><td>${fmtN(m.vol)}</td><td>${fmtM(m.fixed)}</td><td>${fmtM(m.profit)}</td><td>${isFinite(m.be)?fmtN(m.be):'never'}</td><td class="l">—</td></tr>`+sc.map(({s,m:x})=>`<tr><td class="l">${s.n}<div class="note" style="margin:0">${s.d}</div></td><td>${fmtD(x.net)}</td><td>${fmtD(x.cost)}</td><td>${fmtN(x.vol)}</td><td>${fmtM(x.fixed)}</td><td><span class="pill ${x.profit>=0?'good':'bad'}">${fmtM(x.profit)}</span></td><td>${isFinite(x.be)?fmtN(x.be):'never'}</td><td class="l" style="min-width:190px">${s.fix}</td></tr>`).join('');
+ $('chMC').innerHTML=hist(MC);
+ $('mcNote').innerHTML=`Each run draws price (−8% to +5%), cost (−5% to +8%), cars (−25% to +15%) and fixed costs (−5% to +10%) at random around your inputs, scaled by the width slider. <b>${(MC.pLoss*100).toFixed(0)}% of runs lose money.</b> Median profit ${fmtM(MC.p50)}; 90% of runs fall between ${fmtM(MC.p5)} and ${fmtM(MC.p95)}.`;
+ const worst=Math.min(m.profit,...sc.map(x=>x.m.profit)),tough=sc.filter(x=>x.m.profit<0).length;
+ $('moneyVerdict').innerHTML=`<div class="callout ${m.profit<=0?'bad':MC.pLoss>.25?'warn':'good'}"><b>Base profit ${fmtM(m.profit)}, worst named case ${fmtM(worst)}, ${(MC.pLoss*100).toFixed(0)}% chance of a loss.</b> ${m.profit<=0?'The base case already loses money. Raise price, cut cost or fixed costs, or ship more.':`${tough} of ${sc.length} named stress cases lose money, so ship only against firm orders. Margin of safety in the base case is ${isFinite(m.ms)?(m.ms*100).toFixed(0):'0'}%.`}</div>`;
+ return{m,worst}}
+
+function renderSummary(){const m=model(),sc=allScen().map(s=>model(s).profit),worst=Math.min(m.profit,...sc);
+ $('shMk').textContent=S.market;
+ const c=(l,v,cls='')=>`<div class="c"><small>${l}</small><b class="${cls}">${v}</b></div>`;
+ $('shGrid').innerHTML=c('Volume',fmtN(m.vol)+' cars')+c('Revenue',fmtM(m.rev))+c('Profit',fmtM(m.profit),m.profit<0?'neg':'pos')+c('Break-even',isFinite(m.be)?fmtN(m.be)+' cars':'none')+c('Worst case',fmtM(worst),worst<0?'neg':'pos')+c('Loss chance',MC?(MC.pLoss*100).toFixed(0)+'%':'…',MC&&MC.pLoss>.25?'neg':'pos');
+ let cls='go',t='GO',d='Profit holds with a low chance of loss.';
+ if(m.profit<=0){cls='stop';t='NO-GO';d='The base case loses money.'}else if(MC&&MC.pLoss>.25){cls='caution';t='GO WITH CONDITIONS';d='Profitable, but '+(MC.pLoss*100).toFixed(0)+'% of random runs lose. Ship only against firm orders.'}
+ $('shVerdict').className='verdict '+cls;$('shVerdict').innerHTML=t+`<small>${d}</small>`;
+ const v=[m.profit,...sc];$('shMini').innerHTML=diverge(v,['B','1','2','3','4'],x=>'').replace('<svg ','<svg style="max-height:96px" ')}
+
+function renderAccess(){const a=ACCESS[S.market];
+ $('accNote').innerHTML=`<div class="callout ${S.market==='Australia'?'good':'bad'}" style="margin-top:0"><b>${S.market}: MFN ${a.mfn}%, India pays ${S.tariff}% in the model.</b> ${S.market==='Australia'?'The India–Australia ECTA gives India 0% on this line, level with Japan and Korea, so price competition is on equal terms.':'MacMap (tariff year 2022) shows 20% with no preference for India. News reports say Mexico raised duties on countries without a trade deal to 50% from January 2026, so try 50% in the input.'}</div><p class="note">Duty absorbed by exporter is the share of the duty we cut from our price to stay level with rivals paying 0%. At 100% we match their landed price exactly.</p>`}
+
+function render(){MC=null;renderMoney();renderSummary();renderMarket();renderVolume();renderAccess()}
+
+function init(){tabsInit();renderStatic();
+ const wp=$('wPre');Object.entries(WSETS).forEach(([k,w])=>{const b=document.createElement('button');b.type='button';b.className='pre';b.textContent=k;b.setAttribute('aria-pressed',k==='Balanced');b.onclick=()=>{S.w=[...w];wp.querySelectorAll('.pre').forEach(x=>x.setAttribute('aria-pressed',x===b));CTLS.forEach(c=>c.sync());render()};wp.appendChild(b)});
+ const W=$('wCtl');[['Import value','size'],['Growth 2020–25','growth'],['Unit value vs world','price'],['India’s current share','share']].forEach(([l,k],i)=>ctl(W,{id:k,label:l,min:0,max:100,step:5,get:()=>S.w[i],set:v=>{S.w[i]=v;wp.querySelectorAll('.pre').forEach(x=>x.setAttribute('aria-pressed',false))}}));
+ const V=$('volCtl');
+ ctl(V,{id:'upw',label:'Cars per week',sub:'plant capacity set aside for export',min:5,max:150,step:1,get:()=>S.upw,set:v=>S.upw=v});
+ ctl(V,{id:'wk',label:'Weeks of supply',sub:'shipping weeks in the year',min:4,max:52,step:1,get:()=>S.weeks,set:v=>S.weeks=v});
+ ctl($('tdCtl'),{id:'sh',label:'Realistic share of imports, %',sub:'India held 1.9% of Australian cars in 2025',min:.1,max:5,step:.05,get:()=>S.share,set:v=>S.share=v});
+ const C=$('costCtl');
+ ctl(C,{id:'price',label:'Selling price per car',sub:'India’s 2025 price into the market is the start',min:8000,max:30000,step:100,get:()=>S.price,set:v=>S.price=v});
+ ctl(C,{id:'mfg',label:'Manufacturing cost',min:6000,max:20000,step:100,get:()=>S.mfg,set:v=>S.mfg=v});
+ ctl(C,{id:'frt',label:'Freight and insurance',min:200,max:2500,step:25,get:()=>S.freight,set:v=>S.freight=v});
+ ctl(C,{id:'port',label:'Port, clearance, delivery prep',min:0,max:1500,step:25,get:()=>S.port,set:v=>S.port=v});
+ ctl(C,{id:'war',label:'Warranty provision',min:0,max:1000,step:25,get:()=>S.warr,set:v=>S.warr=v});
+ const pp=$('pricePre');[['India’s 2025 price',()=>S.market==='Australia'?15144:13097],['Match China',()=>16127],['Match Korea',()=>17560]].forEach(([l,f])=>{const b=document.createElement('button');b.type='button';b.className='pre';b.textContent=l;b.onclick=()=>{S.price=f();CTLS.forEach(c=>c.sync());render()};pp.appendChild(b)});
+ const F=$('fixCtl');[['compliance','Approval and compliance',0,1500],['marketing','Dealer network and marketing',0,1500],['tooling','Right-hand-drive tooling, annualised',0,2000],['yard','Port yard and storage',0,800],['admin','Admin and finance',0,800]].forEach(([k,l,a,b])=>ctl(F,{id:k,label:l,min:a,max:b,step:10,get:()=>S.fix[k],set:v=>S.fix[k]=v}));
+ ctl($('mcCtl'),{id:'unc',label:'Width of the random ranges',sub:'1 = ranges stated below, 2 = twice as wide',min:.25,max:2.5,step:.25,get:()=>S.unc,set:v=>S.unc=v});
+ const A=$('accCtl');
+ ctl(A,{id:'tar',label:'Tariff India pays, %',sub:'MacMap value for the chosen market',min:0,max:60,step:.5,get:()=>S.tariff,set:v=>S.tariff=v});
+ ctl(A,{id:'abs',label:'Duty absorbed by exporter, %',sub:'share of the duty cut from our price',min:0,max:100,step:5,get:()=>S.absorb,set:v=>S.absorb=v});
+ const T=$('stressCtl');[['dp','Price change, %',-30,10],['dc','Cost per car change, %',-10,30],['dv','Cars sold change, %',-60,20],['df','Fixed cost change, %',-20,40]].forEach(([k,l,a,b])=>ctl(T,{id:k,label:l,min:a,max:b,step:1,get:()=>S.cust[k],set:v=>S.cust[k]=v}));
+ render();
+ try{const q=$('qrbox');if(window.QRCode&&/^https?:/.test(location.href)){q.innerHTML='Open on your phone';new QRCode(q,{text:location.href.split('#')[0],width:112,height:112,correctLevel:QRCode.CorrectLevel.M})}}catch(e){}}
+try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+$('themeBtn').onclick=()=>{const d=document.documentElement,c=d.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=c==='dark'?'light':'dark';d.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};
+init();
+</script>
+</body>
+</html>
