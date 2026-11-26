@@ -29,12 +29,8 @@ h1,h2,h3{font-family:var(--fh);margin:0;text-wrap:balance;letter-spacing:-.01em}
 .theme{margin-top:18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 12px;font:500 12.5px var(--fb);cursor:pointer}
 .qrbox{margin-top:18px;font-size:12px;color:var(--mute)}.qrbox canvas,.qrbox img{display:block;margin-top:6px;border-radius:6px;background:#fff;padding:5px}
 main{min-width:0}
-section.step{display:none}section.step.on{display:block;animation:in .35s cubic-bezier(.2,.7,.2,1)}
-@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-details.card summary{cursor:pointer;font:600 16px var(--fh)}details.card[open] summary{margin-bottom:12px}
-.nextrow{display:flex;justify-content:flex-end;margin-top:22px}.next{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:11px 18px;font:600 14px var(--fb);cursor:pointer;transition:transform .15s}.next:hover{transform:translateX(3px)}
-main{min-height:80vh}
-.kpi,.card,.sheet .c b{transition:background-color .2s,border-color .2s}
+section.step{display:none}section.step.on{display:block;animation:in .25s ease-out}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){section.step.on{animation:none}html{scroll-behavior:auto}}
 .hero{padding:6px 2px 4px}.hero small{font:600 12px var(--fm);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
 .hero h2{font-size:34px;line-height:1.08;margin-top:6px}
@@ -133,13 +129,14 @@ svg text{fill:var(--mute);font:16px var(--fb)}svg .ln{stroke:var(--line)}svg .in
   <div class="card"><h3>Weighted scorecard</h3><div class="scroll"><table id="score"></table></div></div></div>
  <div class="card"><h3>Robustness check</h3><div class="scroll"><table id="robust"></table></div><div id="decide"></div></div>
  <div class="grid2"><div class="card"><h3>What India actually sold, $ million</h3><div id="chTrend"></div><p class="note">Mexico was India’s largest buyer and has fallen 76% since 2017. Australia rose from zero to $64m. Trade Map, India-reported.</p></div>
-  <details class="card"><summary>How each criterion is scored</summary><p class="note">Import value ≥$20bn=5, 10–20=4, 5–10=3, 2–5=2, below 2=1.<br>Growth 2020–25 CAGR ≥15%=5, 7–15=4, 3–7=3, 0–3=2, negative=1.<br>Unit value vs world ≥1.2=5, ≥1.05=4, ≥0.95=3, ≥0.8=2, else 1.<br>India’s share ≥5%=5, 2–5=4, 1–2=3, 0.1–1=2, below 0.1=1.<br>Screened out: Kuwait (2.45) and the UK (2.30) on balanced weights.</p></details></div>
+  <div class="card"><h3>Scoring bands</h3><p class="note" style="margin-top:0">Import value ≥$20bn=5, 10–20=4, 5–10=3, 2–5=2, below 2=1.<br>Growth 2020–25 CAGR ≥15%=5, 7–15=4, 3–7=3, 0–3=2, negative=1.<br>Unit value vs world ≥1.2=5, ≥1.05=4, ≥0.95=3, ≥0.8=2, else 1.<br>India’s share ≥5%=5, 2–5=4, 1–2=3, 0.1–1=2, below 0.1=1.<br>Screened out: Kuwait (2.45) and the UK (2.30) on balanced weights.</p></div></div>
 </section>
 
 <section class="step" id="s-volume"><div class="hero"><small>Step 4 · How much</small><h2>What the plant can ship against what the market can take</h2><p class="lead">Two independent estimates, one built from the plant and one from the market. If they disagree, one assumption is wrong.</p></div>
  <div class="grid2"><div class="card"><h3>Bottom-up <span class="pill acc">assumption</span></h3><div id="volCtl"></div><p class="note">Australian new-car sales peak around March and the end of the financial year in June, so shipments should land before those dates.</p></div>
   <div class="card"><h3>Top-down</h3><div id="tdCtl"></div><table id="tdTbl"></table></div></div>
  <div id="volVerdict"></div>
+ <div class="card"><h3>Plan against the market</h3><div id="chVol"></div></div>
  <div class="src">Market imports in cars: Trade Map quantities, 2025.</div>
 </section>
 
@@ -151,12 +148,11 @@ svg text{fill:var(--mute);font:16px var(--fb)}svg .ln{stroke:var(--line)}svg .in
  <div class="grid2"><div class="card"><h3>Where our price sits</h3><div id="chLadder"></div><p class="note" id="ladderNote"></p></div>
   <div class="card"><h3>Break-even</h3><div id="chBE"></div></div></div>
  <div class="grid2"><div class="card"><h3>Stress test: profit by scenario</h3><div id="chStress"></div></div>
-  <div class="card"><h3>Scenarios</h3><div class="scroll"><table id="stressTbl"></table></div></div></div>
+  <div class="card"><h3>Sensitivity: profit change for ±10% in each driver</h3><div id="chTor"></div></div></div>
+ <div class="card"><h3>Scenarios</h3><div class="scroll"><table id="stressTbl"></table></div>
+  <h3 style="margin-top:16px">Your own pessimistic case</h3><div id="stressCtl"></div></div>
+ <div class="card"><h3>4,000 random runs</h3><div id="mcCtl"></div><div id="chMC"></div><p class="note" id="mcNote"></p></div>
  <div id="moneyVerdict"></div>
- <details class="card"><summary>More risk analysis: sensitivity, 4,000 random runs, your own case</summary>
-  <h3>Sensitivity: profit change for ±10% in each driver</h3><div id="chTor"></div>
-  <h3 style="margin-top:18px">4,000 random runs</h3><div id="mcCtl"></div><div id="chMC"></div><p class="note" id="mcNote"></p>
-  <h3 style="margin-top:18px">Your own pessimistic case</h3><div id="stressCtl"></div></details>
 </section>
 
 <section class="step" id="s-access"><div class="hero"><small>Step 6 · Access</small><h2>Tariffs, measures, route and plan B</h2><p class="lead">MacMap data for the two markets that matter. The tariff set here feeds the profit model.</p></div>
@@ -173,6 +169,7 @@ svg text{fill:var(--mute);font:16px var(--fb)}svg .ln{stroke:var(--line)}svg .in
   <div class="mk" id="shMk"></div>
   <div class="grid" id="shGrid"></div>
   <div class="verdict" id="shVerdict"></div>
+  <div class="mini" id="shMini"></div>
  </aside>
 </div>
 
@@ -280,8 +277,7 @@ function hist(mc){const W=520,H=210,pl=14,pr=14,pt=14,pb=34,B=28;const lo=mc.out
 /* render */
 function tabsInit(){const steps=[['product','Product and code'],['edge','India’s edge'],['market','Market choice'],['volume','How much'],['money','Money and risk'],['access','Access']];
  const t=$('tabs');steps.forEach(([id,l],i)=>{const li=document.createElement('li');const b=document.createElement('button');b.type='button';b.dataset.id=id;b.setAttribute('role','tab');b.innerHTML=`<i>${i+1}</i>${l}`;b.onclick=()=>{location.hash=id};li.appendChild(b);t.appendChild(li)});
- const show=()=>{const id=(location.hash||'#product').slice(1);const ok=steps.some(s=>s[0]===id)?id:'product';CUR=ok;if(typeof MET!=='undefined')doRender();document.querySelectorAll('section.step').forEach(s=>s.classList.toggle('on',s.id==='s-'+ok));t.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));window.scrollTo({top:0,behavior:'smooth'})};
- steps.forEach(([id],i)=>{if(i<steps.length-1){const s=$('s-'+id),n=steps[i+1];const d=document.createElement('div');d.className='nextrow';d.innerHTML=`<button type="button" class="next">Next: ${n[1]} →</button>`;d.firstChild.onclick=()=>{location.hash=n[0]};s.appendChild(d)}});
+ const show=()=>{const id=(location.hash||'#product').slice(1);const ok=steps.some(s=>s[0]===id)?id:'product';document.querySelectorAll('section.step').forEach(s=>s.classList.toggle('on',s.id==='s-'+ok));t.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));window.scrollTo(0,0)};
  addEventListener('hashchange',show);show()}
 
 function renderStatic(){
@@ -315,17 +311,18 @@ function setMarket(n){const a=ACCESS[n];S.market=n;S.price=a.preset.price;S.frei
 function renderVolume(){const m=model(),mk=MK[S.market],units=mk.qty,td=units*S.share/100,gap=(m.vol-td)/td;
  $('tdTbl').innerHTML=`<tr><td>${S.market} imports 2025</td><td>${fmtN(units)} cars</td></tr><tr><td>Realistic share</td><td>${S.share.toFixed(2)}%</td></tr><tr class="hl"><td>Top-down volume</td><td>${fmtN(td)} cars</td></tr><tr><td>India sold there in 2025</td><td>${fmtN(mk.iu)} cars</td></tr><tr><td>Plan as share of market</td><td>${(m.vol/units*100).toFixed(2)}%</td></tr>`;
  const ok=Math.abs(gap)<=.2;
- $('volVerdict').innerHTML=`<div class="callout ${ok?'good':'warn'}"><b>Bottom-up ${fmtN(m.vol)} cars against top-down ${fmtN(td)} cars: gap ${gap>0?'+':''}${(gap*100).toFixed(0)}%.</b> ${ok?'The estimates agree within 20%, so the volume is credible.':gap>0?'The plant plans more than the market share supports. Cut weeks or cars per week, or justify a higher share.':'The market could take more than the plant plans to ship. There is room to add capacity.'} The plan equals ${(m.vol/mk.iu*100).toFixed(0)}% of what India sold into ${S.market} in 2025.</div>`;}
+ $('volVerdict').innerHTML=`<div class="callout ${ok?'good':'warn'}"><b>Bottom-up ${fmtN(m.vol)} cars against top-down ${fmtN(td)} cars: gap ${gap>0?'+':''}${(gap*100).toFixed(0)}%.</b> ${ok?'The estimates agree within 20%, so the volume is credible.':gap>0?'The plant plans more than the market share supports. Cut weeks or cars per week, or justify a higher share.':'The market could take more than the plant plans to ship. There is room to add capacity.'} The plan equals ${(m.vol/mk.iu*100).toFixed(0)}% of what India sold into ${S.market} in 2025.</div>`;
+ $('chVol').innerHTML=bars([m.vol,td,mk.iu],['Bottom-up plan','Top-down share','India sold 2025'],{vl:v=>fmtN(v),fy:v=>fmtN(v),aria:'Volume comparison',hl:i=>i===0})}
 
 let MC=null;
-function renderMoney(){const m=model(),sc=allScen().map(s=>({s,m:model(s)}));
+function renderMoney(){const m=model(),sc=allScen().map(s=>({s,m:model(s)}));MC=monte();
  $('unitKpis').innerHTML=`<div class="kpi"><small>Net price per car</small><b>${fmtD(m.net)}</b><i>after duty absorbed</i></div><div class="kpi"><small>Cost per car</small><b>${fmtD(m.cost)}</b><i>variable</i></div><div class="kpi"><small>Margin per car</small><b>${fmtD(m.cm)}</b><i>${m.net?(m.cm/m.net*100).toFixed(1):0}% of price</i></div><div class="kpi"><small>Break-even</small><b>${isFinite(m.be)?fmtN(m.be):'never'}</b><i>${isFinite(m.be)&&m.vol?(m.be/m.vol*100).toFixed(0)+'% of plan':'margin negative'}</i></div><div class="kpi"><small>Base profit</small><b>${fmtM(m.profit)}</b><i>fixed ${fmtM(m.fixed)}</i></div>`;
  $('chLadder').innerHTML=ladder();
  $('ladderNote').textContent=S.market==='Australia'?`India’s 2025 price into Australia was $15,144, 16% below Japan ($18,055) and 6% below China ($16,127). Price is the lever with most room.`:`India’s 2025 price into Mexico was $13,097 against a market average of $16,645. A 20% duty on top makes that gap hard to hold.`;
  $('chBE').innerHTML=beChart(m);
  $('chStress').innerHTML=diverge([m.profit,...sc.map(x=>x.m.profit)],['Base','Price war','Cost shock','Storm','Yours'],v=>(v<0?'−':'')+'$'+(Math.abs(v)/1e6).toFixed(1)+'m');
  $('chTor').innerHTML=tornado();
- $('stressTbl').innerHTML=`<tr><th>Scenario</th><th>Profit</th><th class="l">Response</th></tr><tr class="hl"><td>Base</td><td>${fmtM(m.profit)}</td><td class="l">Net price ${fmtD(m.net)}, cost ${fmtD(m.cost)}, ${fmtN(m.vol)} cars</td></tr>`+sc.map(({s,m:x})=>`<tr><td class="l">${s.n}<div class="note" style="margin:0">${s.d}</div></td><td><span class="pill ${x.profit>=0?'good':'bad'}">${fmtM(x.profit)}</span></td><td class="l">${s.fix}</td></tr>`).join('');
+ $('stressTbl').innerHTML=`<tr><th>Scenario</th><th>Net price</th><th>Cost</th><th>Cars</th><th>Fixed</th><th>Profit</th><th>Break-even</th><th class="l">Response</th></tr><tr class="hl"><td>Base</td><td>${fmtD(m.net)}</td><td>${fmtD(m.cost)}</td><td>${fmtN(m.vol)}</td><td>${fmtM(m.fixed)}</td><td>${fmtM(m.profit)}</td><td>${isFinite(m.be)?fmtN(m.be):'never'}</td><td class="l">—</td></tr>`+sc.map(({s,m:x})=>`<tr><td class="l">${s.n}<div class="note" style="margin:0">${s.d}</div></td><td>${fmtD(x.net)}</td><td>${fmtD(x.cost)}</td><td>${fmtN(x.vol)}</td><td>${fmtM(x.fixed)}</td><td><span class="pill ${x.profit>=0?'good':'bad'}">${fmtM(x.profit)}</span></td><td>${isFinite(x.be)?fmtN(x.be):'never'}</td><td class="l" style="min-width:190px">${s.fix}</td></tr>`).join('');
  $('chMC').innerHTML=hist(MC);
  $('mcNote').innerHTML=`Each run draws price (−8% to +5%), cost (−5% to +8%), cars (−25% to +15%) and fixed costs (−5% to +10%) at random around your inputs, scaled by the width slider. <b>${(MC.pLoss*100).toFixed(0)}% of runs lose money.</b> Median profit ${fmtM(MC.p50)}; 90% of runs fall between ${fmtM(MC.p5)} and ${fmtM(MC.p95)}.`;
  const worst=Math.min(m.profit,...sc.map(x=>x.m.profit)),tough=sc.filter(x=>x.m.profit<0).length;
@@ -338,14 +335,13 @@ function renderSummary(){const m=model(),sc=allScen().map(s=>model(s).profit),wo
  $('shGrid').innerHTML=c('Volume',fmtN(m.vol)+' cars')+c('Revenue',fmtM(m.rev))+c('Profit',fmtM(m.profit),m.profit<0?'neg':'pos')+c('Break-even',isFinite(m.be)?fmtN(m.be)+' cars':'none')+c('Worst case',fmtM(worst),worst<0?'neg':'pos')+c('Loss chance',MC?(MC.pLoss*100).toFixed(0)+'%':'…',MC&&MC.pLoss>.25?'neg':'pos');
  let cls='go',t='GO',d='Profit holds with a low chance of loss.';
  if(m.profit<=0){cls='stop';t='NO-GO';d='The base case loses money.'}else if(MC&&MC.pLoss>.25){cls='caution';t='GO WITH CONDITIONS';d='Profitable, but '+(MC.pLoss*100).toFixed(0)+'% of random runs lose. Ship only against firm orders.'}
- $('shVerdict').className='verdict '+cls;$('shVerdict').innerHTML=t+`<small>${d}</small>`;}
+ $('shVerdict').className='verdict '+cls;$('shVerdict').innerHTML=t+`<small>${d}</small>`;
+ const v=[m.profit,...sc];$('shMini').innerHTML=diverge(v,['B','1','2','3','4'],x=>'').replace('<svg ','<svg style="max-height:96px" ')}
 
 function renderAccess(){const a=ACCESS[S.market];
  $('accNote').innerHTML=`<div class="callout ${S.market==='Australia'?'good':'bad'}" style="margin-top:0"><b>${S.market}: MFN ${a.mfn}%, India pays ${S.tariff}% in the model.</b> ${S.market==='Australia'?'The India–Australia ECTA gives India 0% on this line, level with Japan and Korea, so price competition is on equal terms.':'MacMap (tariff year 2022) shows 20% with no preference for India. News reports say Mexico raised duties on countries without a trade deal to 50% from January 2026, so try 50% in the input.'}</div><p class="note">Duty absorbed by exporter is the share of the duty we cut from our price to stay level with rivals paying 0%. At 100% we match their landed price exactly.</p>`}
 
-let CUR='product',raf=0;
-function doRender(){MC=monte();renderSummary();if(CUR==='market')renderMarket();if(CUR==='volume')renderVolume();if(CUR==='money')renderMoney();if(CUR==='access')renderAccess()}
-function render(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;doRender()})}
+function render(){MC=null;renderMoney();renderSummary();renderMarket();renderVolume();renderAccess()}
 
 function init(){tabsInit();renderStatic();
  const wp=$('wPre');Object.entries(WSETS).forEach(([k,w])=>{const b=document.createElement('button');b.type='button';b.className='pre';b.textContent=k;b.setAttribute('aria-pressed',k==='Balanced');b.onclick=()=>{S.w=[...w];wp.querySelectorAll('.pre').forEach(x=>x.setAttribute('aria-pressed',x===b));CTLS.forEach(c=>c.sync());render()};wp.appendChild(b)});
