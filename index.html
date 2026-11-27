@@ -29,8 +29,12 @@ h1,h2,h3{font-family:var(--fh);margin:0;text-wrap:balance;letter-spacing:-.01em}
 .theme{margin-top:18px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 12px;font:500 12.5px var(--fb);cursor:pointer}
 .qrbox{margin-top:18px;font-size:12px;color:var(--mute)}.qrbox canvas,.qrbox img{display:block;margin-top:6px;border-radius:6px;background:#fff;padding:5px}
 main{min-width:0}
-section.step{display:none}section.step.on{display:block;animation:in .25s ease-out}
-@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+section.step{display:none}section.step.on{display:block;animation:in .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+details.card summary{cursor:pointer;font:600 16px var(--fh)}details.card[open] summary{margin-bottom:12px}
+.vt section.step.on{animation:none}::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}.nextrow{display:flex;justify-content:flex-end;margin-top:22px}.next{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:11px 18px;font:600 14px var(--fb);cursor:pointer;transition:transform .15s}.next:hover{transform:translateX(3px)}
+main{min-height:80vh}
+.kpi,.card,.sheet .c b{transition:background-color .2s,border-color .2s}
 @media (prefers-reduced-motion:reduce){section.step.on{animation:none}html{scroll-behavior:auto}}
 .hero{padding:6px 2px 4px}.hero small{font:600 12px var(--fm);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
 .hero h2{font-size:34px;line-height:1.08;margin-top:6px}
@@ -277,7 +281,8 @@ function hist(mc){const W=520,H=210,pl=14,pr=14,pt=14,pb=34,B=28;const lo=mc.out
 /* render */
 function tabsInit(){const steps=[['product','Product and code'],['edge','India’s edge'],['market','Market choice'],['volume','How much'],['money','Money and risk'],['access','Access']];
  const t=$('tabs');steps.forEach(([id,l],i)=>{const li=document.createElement('li');const b=document.createElement('button');b.type='button';b.dataset.id=id;b.setAttribute('role','tab');b.innerHTML=`<i>${i+1}</i>${l}`;b.onclick=()=>{location.hash=id};li.appendChild(b);t.appendChild(li)});
- const show=()=>{const id=(location.hash||'#product').slice(1);const ok=steps.some(s=>s[0]===id)?id:'product';document.querySelectorAll('section.step').forEach(s=>s.classList.toggle('on',s.id==='s-'+ok));t.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));window.scrollTo(0,0)};
+ const apply=()=>{const id=(location.hash||'#product').slice(1);const ok=steps.some(s=>s[0]===id)?id:'product';CUR=ok;if(typeof MET!=='undefined')doRender();document.querySelectorAll('section.step').forEach(s=>s.classList.toggle('on',s.id==='s-'+ok));t.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===ok));window.scrollTo(0,0)};
+ const show=()=>{const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(document.startViewTransition&&!rm){document.documentElement.classList.add('vt');document.startViewTransition(apply)}else apply()};
  addEventListener('hashchange',show);show()}
 
 function renderStatic(){
@@ -315,7 +320,7 @@ function renderVolume(){const m=model(),mk=MK[S.market],units=mk.qty,td=units*S.
  $('chVol').innerHTML=bars([m.vol,td,mk.iu],['Bottom-up plan','Top-down share','India sold 2025'],{vl:v=>fmtN(v),fy:v=>fmtN(v),aria:'Volume comparison',hl:i=>i===0})}
 
 let MC=null;
-function renderMoney(){const m=model(),sc=allScen().map(s=>({s,m:model(s)}));MC=monte();
+function renderMoney(){const m=model(),sc=allScen().map(s=>({s,m:model(s)}));
  $('unitKpis').innerHTML=`<div class="kpi"><small>Net price per car</small><b>${fmtD(m.net)}</b><i>after duty absorbed</i></div><div class="kpi"><small>Cost per car</small><b>${fmtD(m.cost)}</b><i>variable</i></div><div class="kpi"><small>Margin per car</small><b>${fmtD(m.cm)}</b><i>${m.net?(m.cm/m.net*100).toFixed(1):0}% of price</i></div><div class="kpi"><small>Break-even</small><b>${isFinite(m.be)?fmtN(m.be):'never'}</b><i>${isFinite(m.be)&&m.vol?(m.be/m.vol*100).toFixed(0)+'% of plan':'margin negative'}</i></div><div class="kpi"><small>Base profit</small><b>${fmtM(m.profit)}</b><i>fixed ${fmtM(m.fixed)}</i></div>`;
  $('chLadder').innerHTML=ladder();
  $('ladderNote').textContent=S.market==='Australia'?`India’s 2025 price into Australia was $15,144, 16% below Japan ($18,055) and 6% below China ($16,127). Price is the lever with most room.`:`India’s 2025 price into Mexico was $13,097 against a market average of $16,645. A 20% duty on top makes that gap hard to hold.`;
@@ -341,7 +346,9 @@ function renderSummary(){const m=model(),sc=allScen().map(s=>model(s).profit),wo
 function renderAccess(){const a=ACCESS[S.market];
  $('accNote').innerHTML=`<div class="callout ${S.market==='Australia'?'good':'bad'}" style="margin-top:0"><b>${S.market}: MFN ${a.mfn}%, India pays ${S.tariff}% in the model.</b> ${S.market==='Australia'?'The India–Australia ECTA gives India 0% on this line, level with Japan and Korea, so price competition is on equal terms.':'MacMap (tariff year 2022) shows 20% with no preference for India. News reports say Mexico raised duties on countries without a trade deal to 50% from January 2026, so try 50% in the input.'}</div><p class="note">Duty absorbed by exporter is the share of the duty we cut from our price to stay level with rivals paying 0%. At 100% we match their landed price exactly.</p>`}
 
-function render(){MC=null;renderMoney();renderSummary();renderMarket();renderVolume();renderAccess()}
+let CUR='product',raf=0;
+function doRender(){MC=monte();renderSummary();if(CUR==='market')renderMarket();if(CUR==='volume')renderVolume();if(CUR==='money')renderMoney();if(CUR==='access')renderAccess()}
+function render(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;doRender()})}
 
 function init(){tabsInit();renderStatic();
  const wp=$('wPre');Object.entries(WSETS).forEach(([k,w])=>{const b=document.createElement('button');b.type='button';b.className='pre';b.textContent=k;b.setAttribute('aria-pressed',k==='Balanced');b.onclick=()=>{S.w=[...w];wp.querySelectorAll('.pre').forEach(x=>x.setAttribute('aria-pressed',x===b));CTLS.forEach(c=>c.sync());render()};wp.appendChild(b)});
